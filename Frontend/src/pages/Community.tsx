@@ -1,454 +1,261 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 
-// Define the Document interface to fix type errors
-interface Document {
+interface Project {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  author: string;
-  tags: string[];
-  createdAt: string;
-  stars: number;
-  forks: number;
-  isStarred?: boolean;
-  isForked?: boolean;
+  items?: string[];
 }
 
-// DocumentsTable component
-const DocumentsTable = ({ documents, onStarClick, onForkClick }: {
-  documents: Document[];
-  onStarClick: (docId: string) => void;
-  onForkClick: (docId: string) => void;
-}) => {
-  return (
-    <div className="overflow-x-auto bg-black/20 backdrop-blur-sm rounded-xl border border-gray-700">
-      <table className="min-w-full divide-y divide-gray-700">
-        <thead>
-          <tr>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Project</th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Author</th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tags</th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Created</th>
-            <th className="py-3 px-4 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-700">
-          {documents.map((doc) => (
-            <tr key={doc.id} className="hover:bg-black/30 transition-colors duration-200">
-              <td className="py-4 px-4">
-                <div>
-                  <div className="font-medium text-white">{doc.title}</div>
-                  <div className="text-sm text-gray-400">{doc.description}</div>
-                </div>
-              </td>
-              <td className="py-4 px-4 text-sm text-gray-300">{doc.author}</td>
-              <td className="py-4 px-4">
-                <div className="flex flex-wrap gap-1">
-                  {doc.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary-light"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </td>
-              <td className="py-4 px-4 text-sm text-gray-300">{doc.createdAt}</td>
-              <td className="py-4 px-4 text-sm text-gray-300 text-center">
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => onStarClick(doc.id)}
-                    className="flex items-center gap-1 text-gray-400 hover:text-yellow-400 transition-colors duration-200"
-                  >
-                    <svg
-                      className={`w-5 h-5 ${
-                        doc.isStarred ? "text-yellow-400 fill-yellow-400" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                      />
-                    </svg>
-                    <span>{doc.stars}</span>
-                  </button>
-                  <button
-                    onClick={() => onForkClick(doc.id)}
-                    className="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition-colors duration-200"
-                  >
-                    <svg
-                      className={`w-5 h-5 ${
-                        doc.isForked ? "text-cyan-400" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
-                      />
-                    </svg>
-                    <span>{doc.forks}</span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-// FeaturedProject component
-const FeaturedProject = ({ project }: { project: Document }) => {
-  return (
-    <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-primary/30 p-6 flex flex-col h-full">
-      <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
-      <p className="text-gray-300 mb-3">{project.description}</p>
-      <div className="flex flex-wrap gap-1 mb-4">
-        {project.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary/20 text-primary-light"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-      <div className="flex items-center text-sm text-gray-400 mt-auto">
-        <span className="flex items-center mr-4">
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-          </svg>
-          {project.stars}
-        </span>
-        <span className="flex items-center mr-4">
-          <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-          </svg>
-          {project.forks}
-        </span>
-        <span className="ml-auto text-gray-400">{project.author}</span>
-      </div>
-    </div>
-  );
-};
-
 export default function Community() {
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [featuredProjects, setFeaturedProjects] = useState<Document[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newProject, setNewProject] = useState({ name: "", description: "" });
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [newItem, setNewItem] = useState("");
+  const [isItemModalOpen, setIsItemModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        // First try to fetch from the client/public folder
-        const response = await fetch("/community.json");
-        
-        if (!response.ok) {
-          console.error(`Failed fetch status: ${response.status} ${response.statusText}`);
-          throw new Error(`Failed to fetch documents: ${response.status} ${response.statusText}`);
-        }
-        
-        // Check if we got JSON or HTML (in case of server error pages)
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          console.error("Non-JSON response received:", contentType);
-          const text = await response.text();
-          console.error("Response content:", text.substring(0, 200) + "..."); // Log first 200 chars
-          throw new Error("Invalid response format. Expected JSON but received HTML or other format.");
-        }
-        
-        // Parse the JSON response
-        let data;
-        try {
-          data = await response.json();
-        } catch (parseError) {
-          console.error("JSON parse error:", parseError);
-          throw new Error("Failed to parse response as JSON");
-        }
-        
-        // Ensure the expected data structure exists
-        if (!data || !data.documents || !Array.isArray(data.documents)) {
-          throw new Error("Invalid data format: missing documents array");
-        }
+  const handleAddProject = () => {
+    if (newProject.name.trim() === "" || newProject.description.trim() === "") {
+      return;
+    }
 
-        const savedStates = JSON.parse(
-          localStorage.getItem("documentStates") || "{}"
-        );
-
-        // Create hardcoded data if fetch fails
-        const documentsWithStates = data.documents.map((doc: Document) => ({
-          ...doc,
-          isStarred: savedStates[doc.id]?.isStarred || false,
-          isForked: savedStates[doc.id]?.isForked || false,
-          stars: savedStates[doc.id]?.stars || doc.stars || 0,
-          forks: savedStates[doc.id]?.forks || doc.forks || 0,
-        }));
-
-        setDocuments(documentsWithStates);
-        
-        // Set featured projects (top 3 by stars)
-        const featured = [...documentsWithStates]
-          .sort((a, b) => b.stars - a.stars)
-          .slice(0, 3);
-        setFeaturedProjects(featured);
-      } catch (err: any) {
-        console.error("Error fetching community data:", err);
-        setError(err.message);
-        
-        // Use hardcoded data as fallback
-        const fallbackData = getFallbackData();
-        setDocuments(fallbackData);
-        
-        // Set featured projects from fallback data
-        const featured = [...fallbackData]
-          .sort((a, b) => b.stars - a.stars)
-          .slice(0, 3);
-        setFeaturedProjects(featured);
-      } finally {
-        setLoading(false);
-      }
+    const project: Project = {
+      id: Date.now().toString(),
+      name: newProject.name,
+      description: newProject.description,
+      items: []
     };
 
-    fetchDocuments();
-  }, []);
-  
-  // Fallback data function in case JSON fetch fails
-  const getFallbackData = (): Document[] => {
-    return [
-      {
-        id: "comm1",
-        title: "Virtual Study Groups",
-        description: "Platform for forming and managing virtual study groups across different time zones",
-        author: "Lisa Taylor",
-        tags: ["Collaboration", "Remote Learning", "Study Groups"],
-        createdAt: "2023-04-12",
-        stars: 356,
-        forks: 84,
-        isStarred: false,
-        isForked: false
-      },
-      {
-        id: "comm2",
-        title: "Teacher Resource Exchange",
-        description: "Community-driven marketplace for teachers to share and trade educational resources",
-        author: "Michael Rivera",
-        tags: ["Teaching", "Resources", "Sharing Economy"],
-        createdAt: "2023-05-28",
-        stars: 412,
-        forks: 97,
-        isStarred: false,
-        isForked: false
-      },
-      {
-        id: "comm3",
-        title: "Student Mentorship Network",
-        description: "Connecting students with industry professionals for career guidance and mentorship",
-        author: "Hannah Wong",
-        tags: ["Mentorship", "Career Development", "Networking"],
-        createdAt: "2023-06-15",
-        stars: 289,
-        forks: 43,
-        isStarred: false,
-        isForked: false
-      },
-      {
-        id: "comm4",
-        title: "Global Classroom Connect",
-        description: "Platform for connecting classrooms globally for cultural exchange and collaborative projects",
-        author: "Robert Johnson",
-        tags: ["Cultural Exchange", "Global Education", "Collaboration"],
-        createdAt: "2023-07-21",
-        stars: 378,
-        forks: 102,
-        isStarred: false,
-        isForked: false
-      },
-      {
-        id: "comm5",
-        title: "Academic Conference Hub",
-        description: "Virtual conference platform specialized for academic gatherings and presentations",
-        author: "Priya Sharma",
-        tags: ["Conferences", "Academic", "Virtual Events"],
-        createdAt: "2023-08-08",
-        stars: 203,
-        forks: 35,
-        isStarred: false,
-        isForked: false
+    setProjects([...projects, project]);
+    setNewProject({ name: "", description: "" });
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteProject = (id: string) => {
+    setProjects(projects.filter(project => project.id !== id));
+  };
+
+  const handleAddItem = () => {
+    if (!currentProject || newItem.trim() === "") return;
+    
+    setProjects(projects.map(project => {
+      if (project.id === currentProject) {
+        return {
+          ...project,
+          items: [...(project.items || []), newItem]
+        };
       }
-    ];
+      return project;
+    }));
+    
+    setNewItem("");
+    setIsItemModalOpen(false);
+    setCurrentProject(null);
   };
 
-  useEffect(() => {
-    const states = documents.reduce(
-      (acc, doc) => ({
-        ...acc,
-        [doc.id]: {
-          isStarred: doc.isStarred,
-          isForked: doc.isForked,
-          stars: doc.stars,
-          forks: doc.forks,
-        },
-      }),
-      {}
-    );
-
-    localStorage.setItem("documentStates", JSON.stringify(states));
-  }, [documents]);
-
-  const filteredDocuments = documents.filter(
-    (doc) =>
-      doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doc.tags.some((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
-
-  const handleStarClick = async (docId: string) => {
-    try {
-      const updatedDocuments = documents.map((doc) =>
-        doc.id === docId
-          ? {
-              ...doc,
-              stars: doc.isStarred ? doc.stars - 1 : doc.stars + 1,
-              isStarred: !doc.isStarred,
-            }
-          : doc
-      );
-      setDocuments(updatedDocuments);
-      
-      // Update featured projects when stars change
-      const updated = [...updatedDocuments]
-        .sort((a, b) => b.stars - a.stars)
-        .slice(0, 3);
-      setFeaturedProjects(updated);
-    } catch (err) {
-      console.error("Error updating stars:", err);
-    }
-  };
-
-  const handleForkClick = async (docId: string) => {
-    try {
-      const updatedDocuments = documents.map((doc) =>
-        doc.id === docId
-          ? {
-              ...doc,
-              forks: doc.isForked ? doc.forks - 1 : doc.forks + 1,
-              isForked: !doc.isForked,
-            }
-          : doc
-      );
-      setDocuments(updatedDocuments);
-    } catch (err) {
-      console.error("Error updating forks:", err);
-    }
+  const openAddItemModal = (projectId: string) => {
+    setCurrentProject(projectId);
+    setIsItemModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#0B1120] via-[#131B2E] to-[#0B1120]">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background-dark text-white">
       <Navbar />
-      
-      <div className="max-w-7xl mx-auto pt-24 px-8 pb-12">
-        <div className="mb-8">
-          <motion.h1
-            className="text-4xl font-bold bg-gradient-to-r from-cyan-300 to-purple-400 bg-clip-text text-transparent mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+      <div className="container mx-auto px-4 py-8 pt-20">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Community Projects</h1>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
           >
-            Community Hub
-          </motion.h1>
-          <motion.p 
-            className="text-gray-300 mb-8 max-w-3xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Join our thriving community of educators, learners, and innovators. Discover collaborative projects, 
-            contribute your expertise, or start something new. Together, we're reshaping the future of education.
-          </motion.p>
-          
-          {/* Featured Projects Section */}
-          {!loading && !error && (
-            <motion.div
-              className="mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
-              <h2 className="text-2xl font-bold text-white mb-6">Featured Projects</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {featuredProjects.map((project) => (
-                  <FeaturedProject key={project.id} project={project} />
-                ))}
-              </div>
-            </motion.div>
-          )}
-          
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search projects by title, description, author, or tags..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 bg-black/30 backdrop-blur-sm text-white rounded-lg 
-                       focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-gray-400
-                       border border-gray-700"
-            />
-          </div>
+              <path
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Add Project
+          </button>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
+        {/* Project grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
             <motion.div
-              className="w-12 h-12 rounded-full border-2 border-cyan-400 border-t-transparent"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-        ) : error ? (
-          <motion.div className="text-red-400 text-center p-4 bg-red-400/10 rounded-lg border border-red-500/50">
-            {error}
-          </motion.div>
-        ) : filteredDocuments.length > 0 ? (
-          <>
-            <motion.h2 
-              className="text-2xl font-bold text-white mb-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 shadow-lg shadow-black/30 p-6 flex flex-col"
             >
-              All Projects
-            </motion.h2>
-            <DocumentsTable
-              documents={filteredDocuments}
-              onStarClick={handleStarClick}
-              onForkClick={handleForkClick}
-            />
-          </>
-        ) : (
-          <motion.div className="text-center text-gray-400 p-8 bg-gray-800/30 rounded-lg">
-            No projects found matching your search criteria.
-          </motion.div>
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-bold text-white">{project.name}</h3>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => openAddItemModal(project.id)}
+                    className="p-1.5 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-lg transition-colors"
+                    title="Add item"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteProject(project.id)}
+                    className="p-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors"
+                    title="Delete project"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p className="text-gray-300 mb-4">{project.description}</p>
+              
+              {/* Project items */}
+              {project.items && project.items.length > 0 && (
+                <div className="mt-2">
+                  <h4 className="text-sm font-medium text-gray-400 mb-2">Items:</h4>
+                  <ul className="space-y-1.5">
+                    {project.items.map((item, index) => (
+                      <li key={index} className="bg-black/20 rounded p-2 text-sm text-gray-300">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Empty state */}
+        {projects.length === 0 && (
+          <div className="text-center py-12 bg-black/20 backdrop-blur-sm rounded-xl border border-gray-600 shadow-lg shadow-black/30">
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+              />
+            </svg>
+            <h3 className="mt-2 text-xl font-medium text-gray-200">No projects yet</h3>
+            <p className="mt-1 text-gray-400">Get started by adding your first project</p>
+          </div>
+        )}
+
+        {/* Modal for adding new project */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-background-dark border border-gray-700 rounded-xl p-6 max-w-md w-full mx-4 shadow-xl"
+            >
+              <h2 className="text-xl font-bold mb-4">Add New Project</h2>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="projectName" className="block text-sm font-medium text-gray-300 mb-1">
+                    Project Name
+                  </label>
+                  <input
+                    type="text"
+                    id="projectName"
+                    value={newProject.name}
+                    onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                    className="w-full bg-black/20 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Enter project name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="projectDescription" className="block text-sm font-medium text-gray-300 mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    id="projectDescription"
+                    value={newProject.description}
+                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                    className="w-full bg-black/20 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Enter project description"
+                    rows={3}
+                  />
+                </div>
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddProject}
+                    className="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                  >
+                    Add Project
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* Modal for adding item to a project */}
+        {isItemModalOpen && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-background-dark border border-gray-700 rounded-xl p-6 max-w-md w-full mx-4 shadow-xl"
+            >
+              <h2 className="text-xl font-bold mb-4">Add Item to Project</h2>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="itemName" className="block text-sm font-medium text-gray-300 mb-1">
+                    Item Name
+                  </label>
+                  <input
+                    type="text"
+                    id="itemName"
+                    value={newItem}
+                    onChange={(e) => setNewItem(e.target.value)}
+                    className="w-full bg-black/20 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Enter item name"
+                  />
+                </div>
+                <div className="flex justify-end gap-3 mt-6">
+                  <button
+                    onClick={() => {
+                      setIsItemModalOpen(false);
+                      setCurrentProject(null);
+                    }}
+                    className="px-4 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddItem}
+                    className="bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                  >
+                    Add Item
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
         )}
       </div>
     </div>
