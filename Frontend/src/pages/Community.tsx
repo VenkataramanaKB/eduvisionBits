@@ -172,8 +172,8 @@ export default function Community() {
                   <label htmlFor="projectName" className="block text-sm font-medium text-gray-300 mb-1">
                     Project Name
                   </label>
-                  <input
-                    type="text"
+            <input
+              type="text"
                     id="projectName"
                     value={newProject.name}
                     onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
@@ -254,7 +254,7 @@ export default function Community() {
                   </button>
                 </div>
               </div>
-            </motion.div>
+          </motion.div>
           </div>
         )}
       </div>

@@ -186,9 +186,7 @@ export default function Recommendations() {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl">
-                <FiSearch />
-              </div>
+              <FiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl" />
             </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
@@ -204,9 +202,7 @@ export default function Recommendations() {
                 </>
               ) : (
                 <>
-                  <div className="w-5 h-5">
-                    <FiAward />
-                  </div>
+                  <FiAward className="w-5 h-5" />
                   <span>Generate Learning Roadmap</span>
                 </>
               )}
@@ -262,13 +258,9 @@ export default function Recommendations() {
                       onClick={() => saveProject(project)}
                     >
                       {savedProjects.has(project.title) ? (
-                        <div className="w-5 h-5 text-primary">
-                          <FiCheck />
-                        </div>
+                        <FiCheck className="w-5 h-5 text-primary" />
                       ) : (
-                        <div className="w-5 h-5">
-                          <FiStar />
-                        </div>
+                        <FiStar className="w-5 h-5" />
                       )}
                     </motion.button>
                   </div>
@@ -279,9 +271,7 @@ export default function Recommendations() {
 
                   <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
                     <div className="flex items-center gap-2">
-                      <div className="text-primary">
-                        <FiAward />
-                      </div>
+                      <FiAward className="text-primary" />
                       <span className="text-sm text-gray-300">
                         <span className="text-primary font-medium">Difficulty:</span> {project.difficultyLevel}
                       </span>
@@ -301,9 +291,7 @@ export default function Recommendations() {
 
                   <div className="mt-6 pt-6 border-t border-gray-700/50">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="text-primary">
-                        <FiList />
-                      </div>
+                      <FiList className="text-primary" />
                       <h4 className="font-semibold text-white">Learning Roadmap</h4>
                     </div>
                     <div className="space-y-4">
@@ -336,16 +324,12 @@ export default function Recommendations() {
                     >
                       {savedProjects.has(project.title) ? (
                         <>
-                          <div className="w-4 h-4">
-                            <FiCheck />
-                          </div>
+                          <FiCheck className="w-4 h-4" />
                           <span>Saved to Projects</span>
                         </>
                       ) : (
                         <>
-                          <div className="w-4 h-4">
-                            <FiStar />
-                          </div>
+                          <FiStar className="w-4 h-4" />
                           <span>Save to My Projects</span>
                         </>
                       )}
