@@ -376,7 +376,7 @@ const Profile: React.FC = () => {
       <Navbar />
       
       {/* Main content */}
-      <div className="max-w-7xl mx-auto pt-16 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
         <ProfileCard profile={profile} />
         

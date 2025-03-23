@@ -64,7 +64,7 @@ export default function Community() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background-dark text-white">
       <Navbar />
-      <div className="container mx-auto px-4 py-8 pt-20">
+      <div className="container mx-auto px-4 py-8 pt-24">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Community Projects</h1>
           <button
@@ -124,7 +124,7 @@ export default function Community() {
               {/* Project items */}
               {project.items && project.items.length > 0 && (
                 <div className="mt-2">
-                  <h4 className="text-sm font-medium text-gray-400 mb-2">Items:</h4>
+                  <h4 className="text-sm font-medium text-gray-400 mb-2">Projects:</h4>
                   <ul className="space-y-1.5">
                     {project.items.map((item, index) => (
                       <li key={index} className="bg-black/20 rounded p-2 text-sm text-gray-300">{item}</li>
