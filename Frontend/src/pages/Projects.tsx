@@ -2,10 +2,18 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ProjectCard from "../components/ProjectCard";
 
+interface RoadmapStep {
+  step: string;
+  difficulty: string;
+}
+
 interface Project {
   title: string;
   description: string;
   isPublic: boolean;
+  techStack?: string[];
+  difficultyLevel?: string;
+  roadmap?: RoadmapStep[];
 }
 
 export default function Projects() {
@@ -171,6 +179,9 @@ export default function Projects() {
                       onRemove={handleRemove}
                       isPublic={project.isPublic}
                       onToggleVisibility={handleToggleVisibility}
+                      techStack={project.techStack}
+                      difficultyLevel={project.difficultyLevel}
+                      roadmap={project.roadmap}
                     />
                   </motion.div>
                 ))}

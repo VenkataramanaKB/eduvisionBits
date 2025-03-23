@@ -1,12 +1,20 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
+interface RoadmapStep {
+  step: string;
+  difficulty: string;
+}
+
 interface ProjectCardProps {
   title: string;
   description: string;
   onRemove: (title: string) => void;
   isPublic: boolean;
   onToggleVisibility: (title: string) => void;
+  techStack?: string[];
+  difficultyLevel?: string;
+  roadmap?: RoadmapStep[];
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -15,6 +23,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   onRemove,
   isPublic,
   onToggleVisibility,
+  techStack,
+  difficultyLevel,
+  roadmap
 }) => {
   return (
     <motion.div
@@ -27,23 +38,46 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <div className="p-6 flex flex-col h-full">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-xl font-bold text-white">{title}</h3>
-          <motion.button
-            className={`px-2 py-1 text-xs rounded-full transition-colors ${
-              isPublic
-                ? "bg-green-600/80 hover:bg-green-500"
-                : "bg-gray-600/80 hover:bg-gray-500"
-            } text-white`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => onToggleVisibility(title)}
-          >
-            {isPublic ? "Public" : "Private"}
-          </motion.button>
+          <div className="flex items-center gap-2">
+            {difficultyLevel && (
+              <span className="px-2 py-1 text-xs rounded-full bg-primary/80 text-white">
+                {difficultyLevel}
+              </span>
+            )}
+            <motion.button
+              className={`px-2 py-1 text-xs rounded-full transition-colors ${
+                isPublic
+                  ? "bg-green-600/80 hover:bg-green-500"
+                  : "bg-gray-600/80 hover:bg-gray-500"
+              } text-white`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onToggleVisibility(title)}
+            >
+              {isPublic ? "Public" : "Private"}
+            </motion.button>
+          </div>
         </div>
 
         <div className="w-16 h-1 bg-gradient-to-r from-primary to-secondary rounded-full mb-3"></div>
         
-        <p className="text-gray-300 text-sm mb-6 flex-grow">{description}</p>
+        <p className="text-gray-300 text-sm mb-4 flex-grow">{description}</p>
+        
+        {/* Tech Stack */}
+        {techStack && techStack.length > 0 && (
+          <div className="mb-4">
+            <div className="flex flex-wrap gap-2 mt-2">
+              {techStack.map((tech, index) => (
+                <span 
+                  key={index} 
+                  className="px-2 py-1 bg-black/30 border border-gray-700 text-primary rounded-full text-xs font-medium"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-3 mt-auto pt-4 border-t border-gray-700/50">
           {/* View More Button */}

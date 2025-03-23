@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { IconContext } from "react-icons";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FiSearch,
   FiStar,
@@ -7,9 +9,10 @@ import {
   FiGlobe,
   FiLock,
   FiAward,
-  FiList
+  FiList,
+  FiArrowRight
 } from "react-icons/fi";
-import { IconContext } from "react-icons";
+import API from "../services/api";
 
 interface RoadmapStep {
   step: string;
@@ -25,11 +28,14 @@ interface Project {
 }
 
 export default function Recommendations() {
+  const navigate = useNavigate();
   const [prompt, setPrompt] = useState("");
   const [results, setResults] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedProjects, setSavedProjects] = useState(new Map());
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
+  const [savedProjectTitle, setSavedProjectTitle] = useState("");
 
   const fetchRecommendations = async () => {
     if (!prompt.trim()) return;
@@ -38,22 +44,11 @@ export default function Recommendations() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/projects/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch recommendations");
-      }
-
-      const data = await response.json();
+      const data = await API.projects.generate(prompt);
       setResults(data);
     } catch (err: any) {
-      setError(err.message);
+      console.error("Error fetching recommendations:", err);
+      setError(err.message || "Failed to fetch recommendations. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -61,23 +56,66 @@ export default function Recommendations() {
 
   const saveProject = async (project: Project) => {
     try {
-      const response = await fetch("http://localhost:5000/api/projects/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(project),
-      });
-      
-      if (!response.ok) {
-        throw new Error("Failed to save project");
+      // Try to save to backend API
+      try {
+        const savedProject = await API.projects.save(project);
+        console.log("Project saved to backend:", savedProject);
+      } catch (apiError) {
+        console.error("Backend save error (continuing with localStorage):", apiError);
+        // Continue even if backend saving fails
       }
       
-      const savedProject = await response.json();
-      setSavedProjects(new Map(savedProjects).set(savedProject.title, true));
-    } catch (err) {
+      // Mark project as saved in UI
+      setSavedProjects(new Map(savedProjects).set(project.title, true));
+      
+      // Save to localStorage for Projects page
+      const existingProjects = localStorage.getItem("eduVisionProjects");
+      let projectsArray = existingProjects ? JSON.parse(existingProjects) : [];
+      
+      // Check if project already exists to avoid duplicates
+      const projectExists = projectsArray.some((p: any) => p.title === project.title);
+      
+      if (!projectExists) {
+        // Format project for Projects page
+        const projectForStorage = {
+          title: project.title,
+          description: project.description,
+          isPublic: true,
+          techStack: project.techStack,
+          difficultyLevel: project.difficultyLevel,
+          roadmap: project.roadmap
+        };
+        
+        // Add new project to array
+        projectsArray.push(projectForStorage);
+        
+        // Save updated projects array to localStorage
+        localStorage.setItem("eduVisionProjects", JSON.stringify(projectsArray));
+        
+        // Show save notification
+        setSavedProjectTitle(project.title);
+        setShowSaveNotification(true);
+        
+        // Auto-hide notification after 5 seconds
+        setTimeout(() => {
+          setShowSaveNotification(false);
+        }, 5000);
+      }
+    } catch (err: any) {
       console.error("Error saving project:", err);
+      setError("Failed to save project. Please try again.");
+      
+      // Auto-hide error after 3 seconds
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
     }
+  };
+
+  // Navigate to Projects page
+  const goToProjects = () => {
+    setShowSaveNotification(false);
+    navigate('/projects');
   };
 
   return (
@@ -185,7 +223,11 @@ export default function Recommendations() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-black/30 backdrop-blur-sm rounded-xl border border-gray-700 hover:border-primary/50 overflow-hidden transition-all duration-300 shadow-lg"
+                  className={`bg-black/30 backdrop-blur-sm rounded-xl border ${
+                    savedProjects.has(project.title) 
+                      ? "border-primary/50" 
+                      : "border-gray-700 hover:border-primary/30"
+                  } overflow-hidden transition-all duration-300 shadow-lg`}
                 >
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-3">
@@ -193,8 +235,14 @@ export default function Recommendations() {
                       <motion.button 
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="p-2 text-gray-400 hover:text-primary transition-colors bg-black/20 rounded-full"
+                        className={`p-2 transition-colors rounded-full ${
+                          savedProjects.has(project.title)
+                            ? "bg-primary/20 text-primary"
+                            : "bg-black/20 text-gray-400 hover:text-primary"
+                        }`}
                         onClick={() => saveProject(project)}
+                        disabled={savedProjects.has(project.title)}
+                        title={savedProjects.has(project.title) ? "Project saved" : "Save to my projects"}
                       >
                         {savedProjects.has(project.title) ? (
                           <span className="w-5 h-5 text-primary block"><FiCheck /></span>
@@ -258,13 +306,23 @@ export default function Recommendations() {
                       <motion.button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
-                        className="px-4 py-2 bg-primary hover:bg-primary-dark text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
-                        onClick={() => saveProject(project)}
+                        className={`px-4 py-2 ${
+                          savedProjects.has(project.title)
+                            ? "bg-green-600 hover:bg-green-700"
+                            : "bg-primary hover:bg-primary-dark"
+                        } text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2`}
+                        onClick={() => {
+                          if (!savedProjects.has(project.title)) {
+                            saveProject(project);
+                          } else {
+                            goToProjects();
+                          }
+                        }}
                       >
                         {savedProjects.has(project.title) ? (
                           <>
                             <span className="w-4 h-4"><FiCheck /></span>
-                            <span>Saved to Projects</span>
+                            <span>View in Projects</span>
                           </>
                         ) : (
                           <>
@@ -279,6 +337,35 @@ export default function Recommendations() {
               ))}
             </motion.div>
           )}
+
+          {/* Save Success Notification */}
+          <AnimatePresence>
+            {showSaveNotification && (
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                className="fixed bottom-6 right-6 bg-green-600/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50 max-w-md"
+              >
+                <div className="bg-green-500 rounded-full p-2 flex-shrink-0">
+                  <FiCheck className="w-5 h-5" />
+                </div>
+                <div className="flex-grow">
+                  <p className="font-medium">Project Saved!</p>
+                  <p className="text-sm opacity-90">"{savedProjectTitle}" added to your projects</p>
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={goToProjects}
+                  className="flex items-center gap-1 bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-md ml-3 text-sm font-medium transition-colors"
+                >
+                  <span>View</span>
+                  <FiArrowRight className="w-3.5 h-3.5" />
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </IconContext.Provider>
