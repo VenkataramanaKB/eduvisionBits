@@ -5,7 +5,7 @@ Here's a **cool README** for **EduVision** with a compelling structure and your 
 # 📚 EduVision – AI-Driven Learning for Career Growth  
 
 [📄 View the PDF](edu.pdf)  
-📺 [▶ Watch the EduVision Demo](https://github.com/VenkataramanaKB/eduvisionBits/blob/main/videoedu.mp4)  
+📺 [▶ Watch the EduVision Demo](https://youtu.be/TZZG3JokemA?feature=shared)  
 
 ## 🌟 Overview  
 EduVision is an **AI-driven platform** that redefines learning by creating **personalized educational paths** and providing a **verified technical identity**. Unlike traditional platforms that emphasize hobby projects, EduVision focuses on **career-building experiences** that showcase real, proof-based skills.  
