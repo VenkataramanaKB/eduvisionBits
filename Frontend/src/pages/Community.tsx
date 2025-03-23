@@ -124,7 +124,7 @@ export default function Community() {
               {/* Project items */}
               {project.items && project.items.length > 0 && (
                 <div className="mt-2">
-                  <h4 className="text-sm font-medium text-gray-400 mb-2">Items:</h4>
+                  <h4 className="text-sm font-medium text-gray-400 mb-2">Projects:</h4>
                   <ul className="space-y-1.5">
                     {project.items.map((item, index) => (
                       <li key={index} className="bg-black/20 rounded p-2 text-sm text-gray-300">{item}</li>
