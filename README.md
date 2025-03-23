@@ -1,1 +1,1 @@
-[View PDF](https://github.com/VenkataramanaKB/eduvisionBits/edit/main/edu.pdf)
+[📄 View the PDF](https://github.com/VenkataramanaKB/eduvisionBits/blob/main/edu.pdf)
