@@ -1,35 +1,49 @@
-const express = require('express');
 const passport = require('passport');
-const router = express.Router();
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const User = require('../models/User'); // Ensure you have a User model
+require('dotenv').config();
 
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: '/auth/google/callback', // Must match Google Cloud Console
+            passReqToCallback: true
+        },
+        async (request, accessToken, refreshToken, profile, done) => {
+            try {
+                console.log('Google Profile:', profile); // Debugging
+                let user = await User.findOne({ googleId: profile.id });
 
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+                if (!user) {
+                    user = await User.create({
+                        googleId: profile.id,
+                        name: profile.displayName,
+                        email: profile.emails[0].value
+                    });
+                }
 
-
-router.get(
-    '/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect('/dashboard'); 
-    }
+                return done(null, user);
+            } catch (err) {
+                console.error('❌ Error during authentication:', err);
+                return done(err, null);
+            }
+        }
+    )
 );
 
-router.get('/user', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.json({ user: req.user });
-    } else {
-        res.status(401).json({ error: 'Unauthorized' });
+// Serialize user (store user ID in session)
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+// Deserialize user (fetch user from DB using stored ID)
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err, null);
     }
 });
-
-
-router.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) return res.status(500).json({ error: err.message });
-        req.session.destroy(() => {
-            res.redirect('/');
-        });
-    });
-});
-
-module.exports = router;
