@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState('Home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleLogout = (e: React.MouseEvent) => {
+  const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // Navigate to landing page
-    navigate('/landing');
+    await logout();
   };
 
   const navItems = ['Home', 'Projects', 'Community', 'Recommendations'];
@@ -106,7 +107,7 @@ const Navbar = () => {
                          transition-all duration-300 relative overflow-hidden group flex items-center gap-2"
                 onClick={() => navigate("/profile")}
               >
-                <span className="relative z-10">Profile</span>
+                <span className="relative z-10">{user?.name || 'Profile'}</span>
                 <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -208,7 +209,7 @@ const Navbar = () => {
               
               <div className="pt-4 space-y-2">
                 <Link to="/profile" className="w-full py-2.5 px-4 bg-gradient-to-r from-primary to-secondary rounded-md text-sm font-medium text-white shadow-lg flex items-center justify-center gap-2">
-                  <span>Profile</span>
+                  <span>{user?.name || 'Profile'}</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
