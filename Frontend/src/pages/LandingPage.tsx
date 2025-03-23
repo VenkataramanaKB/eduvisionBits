@@ -1,31 +1,12 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    // Simulating authentication
-    try {
-      // Here you would normally make an API call to authenticate
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, just navigate to dashboard
-      localStorage.setItem("isLoggedIn", "true");
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Authentication failed. Please check your credentials.");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleLogin = () => {
+    // Simple login that just navigates to home page
+    navigate("/");
   };
 
   return (
@@ -57,14 +38,15 @@ export default function LandingPage() {
             <div className="flex flex-wrap gap-4">
               <button 
                 className="bg-primary hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                onClick={handleLogin}
               >
-                Learn More
+                Get Started
               </button>
-              <button 
+              {/* <button 
                 className="bg-transparent border border-gray-600 hover:border-primary text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200"
               >
                 Watch Demo
-              </button>
+              </button> */}
             </div>
           </motion.div>
           
@@ -75,77 +57,21 @@ export default function LandingPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="bg-black/30 backdrop-blur-sm rounded-xl border border-gray-600 shadow-lg shadow-black/30 p-8"
           >
-            <h3 className="text-2xl font-bold text-white mb-6">Welcome Back</h3>
+            <h3 className="text-2xl font-bold text-white mb-6">Welcome to EduVision</h3>
+            <p className="text-gray-300 mb-8">
+              Your platform for educational growth and community learning. Join us today to explore a world of knowledge and collaboration.
+            </p>
             
-            {error && (
-              <div className="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg mb-6">
-                {error}
-              </div>
-            )}
-            
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={loginData.email}
-                  onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                  className="w-full bg-black/20 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-              
-              <div>
-                <div className="flex justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
-                    Password
-                  </label>
-                  <a href="#" className="text-sm text-primary hover:text-primary-light">
-                    Forgot password?
-                  </a>
-                </div>
-                <input
-                  type="password"
-                  id="password"
-                  value={loginData.password}
-                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                  className="w-full bg-black/20 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              
-              <div>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
-                >
-                  {isLoading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Logging in...
-                    </>
-                  ) : (
-                    "Log in"
-                  )}
-                </button>
-              </div>
-            </form>
+            <button
+              onClick={handleLogin}
+              className="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+            >
+              Enter Platform
+            </button>
             
             <div className="mt-8 text-center">
               <p className="text-gray-400">
-                Don't have an account?{" "}
-                <a href="#" className="text-primary hover:text-primary-light">
-                  Sign up
-                </a>
+                By continuing, you agree to our Terms of Service and Privacy Policy
               </p>
             </div>
           </motion.div>

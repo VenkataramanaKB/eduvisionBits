@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState('Home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Navigate to landing page
+    navigate('/landing');
+  };
+
   const navItems = ['Home', 'Projects', 'Community', 'Recommendations'];
+
+  // Function to get the correct path for each nav item
+  const getNavPath = (item: string) => {
+    if (item === 'Home') return '/';
+    return `/${item.toLowerCase()}`;
+  };
 
   return (
     <nav className="fixed w-full z-50">
@@ -64,7 +77,7 @@ const Navbar = () => {
                 transition={{ delay: (i + 1) * 0.1, duration: 0.5 }}
               >
                 <Link
-                  to={item.toLowerCase()}
+                  to={getNavPath(item)}
                   className="text-white text-sm font-medium relative group py-2"
                   onClick={() => setActiveItem(item)}
                 >
@@ -91,7 +104,7 @@ const Navbar = () => {
                 className="px-5 py-2.5 bg-gradient-to-r from-primary to-secondary rounded-lg text-sm font-medium text-white
                          shadow-lg shadow-primary/20 border-2 border-white/20 hover:border-white/40 
                          transition-all duration-300 relative overflow-hidden group flex items-center gap-2"
-                onClick={() => window.location.href = "/profile"}
+                onClick={() => navigate("/profile")}
               >
                 <span className="relative z-10">Profile</span>
                 <svg className="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -109,16 +122,17 @@ const Navbar = () => {
                     { name: "Settings", icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" },
                     { name: "Logout", icon: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }
                   ].map((item, index) => (
-                    <Link
+                    <a
                       key={index}
-                      to={item.name === "Logout" ? "/logout" : `/profile/${item.name.toLowerCase()}`}
+                      href={item.name === "Logout" ? "#" : `/profile/${item.name.toLowerCase()}`}
+                      onClick={item.name === "Logout" ? handleLogout : undefined}
                       className="block px-4 py-2 text-sm text-white hover:bg-primary/20 transition-colors duration-200 flex items-center gap-2"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
                       </svg>
                       {item.name}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -177,7 +191,7 @@ const Navbar = () => {
               {navItems.slice(1).map((item) => (
                 <Link
                   key={item}
-                  to={item.toLowerCase()}
+                  to={getNavPath(item)}
                   className={`block py-2 px-3 text-base font-medium rounded-md ${
                     activeItem === item
                     ? 'bg-primary/10 text-white'
@@ -205,12 +219,16 @@ const Navbar = () => {
                   </svg>
                   Settings
                 </Link>
-                <Link to="/logout" className="w-full py-2.5 px-4 text-white hover:text-white text-sm font-medium transition-all rounded-md hover:bg-white/5 flex items-center gap-2">
+                <a 
+                  href="#"
+                  onClick={handleLogout}
+                  className="w-full py-2.5 px-4 text-white hover:text-white text-sm font-medium transition-all rounded-md hover:bg-white/5 flex items-center gap-2"
+                >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
                   Logout
-                </Link>
+                </a>
               </div>
             </div>
           </motion.div>
