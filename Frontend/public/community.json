@@ -1,0 +1,144 @@
+{
+  "documents": [
+    {
+      "id": "comm1",
+      "title": "Virtual Study Groups",
+      "description": "Platform for forming and managing virtual study groups across different time zones",
+      "author": "Lisa Taylor",
+      "tags": ["Collaboration", "Remote Learning", "Study Groups"],
+      "createdAt": "2023-04-12",
+      "stars": 356,
+      "forks": 84
+    },
+    {
+      "id": "comm2",
+      "title": "Teacher Resource Exchange",
+      "description": "Community-driven marketplace for teachers to share and trade educational resources",
+      "author": "Michael Rivera",
+      "tags": ["Teaching", "Resources", "Sharing Economy"],
+      "createdAt": "2023-05-28",
+      "stars": 412,
+      "forks": 97
+    },
+    {
+      "id": "comm3",
+      "title": "Student Mentorship Network",
+      "description": "Connecting students with industry professionals for career guidance and mentorship",
+      "author": "Hannah Wong",
+      "tags": ["Mentorship", "Career Development", "Networking"],
+      "createdAt": "2023-06-15",
+      "stars": 289,
+      "forks": 43
+    },
+    {
+      "id": "comm4",
+      "title": "Global Classroom Connect",
+      "description": "Platform for connecting classrooms globally for cultural exchange and collaborative projects",
+      "author": "Robert Johnson",
+      "tags": ["Cultural Exchange", "Global Education", "Collaboration"],
+      "createdAt": "2023-07-21",
+      "stars": 378,
+      "forks": 102
+    },
+    {
+      "id": "comm5",
+      "title": "Academic Conference Hub",
+      "description": "Virtual conference platform specialized for academic gatherings and presentations",
+      "author": "Priya Sharma",
+      "tags": ["Conferences", "Academic", "Virtual Events"],
+      "createdAt": "2023-08-08",
+      "stars": 203,
+      "forks": 35
+    },
+    {
+      "id": "comm6",
+      "title": "Education Hackathon Platform",
+      "description": "Platform for organizing and participating in education-focused hackathons and challenges",
+      "author": "Carlos Mendez",
+      "tags": ["Hackathons", "Innovation", "Problem Solving"],
+      "createdAt": "2023-09-14",
+      "stars": 321,
+      "forks": 76
+    },
+    {
+      "id": "comm7",
+      "title": "Peer Teaching Network",
+      "description": "Student-led platform where peers can teach and learn from each other in specialized areas",
+      "author": "Emily Chen",
+      "tags": ["Peer Learning", "Student Teaching", "Knowledge Sharing"],
+      "createdAt": "2023-10-22",
+      "stars": 267,
+      "forks": 49
+    },
+    {
+      "id": "comm8",
+      "title": "Research Collaboration Forum",
+      "description": "Platform for finding research partners and collaborators across different institutions",
+      "author": "James Wilson",
+      "tags": ["Research", "Collaboration", "Academia"],
+      "createdAt": "2023-11-19",
+      "stars": 187,
+      "forks": 38
+    },
+    {
+      "id": "comm9",
+      "title": "Inclusive Education Community",
+      "description": "Resources and community support for implementing inclusive education practices",
+      "author": "Sofia Rodriguez",
+      "tags": ["Inclusive Education", "Accessibility", "Teaching Resources"],
+      "createdAt": "2023-12-07",
+      "stars": 298,
+      "forks": 65
+    },
+    {
+      "id": "comm10",
+      "title": "Student Project Showcase",
+      "description": "Platform for students to showcase their projects and receive community feedback",
+      "author": "Tyler Washington",
+      "tags": ["Project Showcase", "Feedback", "Portfolio"],
+      "createdAt": "2024-01-25",
+      "stars": 254,
+      "forks": 42
+    },
+    {
+      "id": "comm11",
+      "title": "Educational Content Creator Community",
+      "description": "Support network and resources for educators creating online learning content",
+      "author": "Aisha Mohammed",
+      "tags": ["Content Creation", "Digital Learning", "Teaching"],
+      "createdAt": "2024-02-18",
+      "stars": 341,
+      "forks": 79
+    },
+    {
+      "id": "comm12",
+      "title": "STEM Outreach Network",
+      "description": "Community organizing STEM outreach programs for underserved communities and schools",
+      "author": "David Garcia",
+      "tags": ["STEM", "Outreach", "Education Equity"],
+      "createdAt": "2024-03-11",
+      "stars": 387,
+      "forks": 104
+    },
+    {
+      "id": "comm13",
+      "title": "Language Exchange Community",
+      "description": "Platform connecting language learners for practice and cultural exchange",
+      "author": "Naomi Tanaka",
+      "tags": ["Language Learning", "Cultural Exchange", "Community"],
+      "createdAt": "2024-03-29",
+      "stars": 312,
+      "forks": 58
+    },
+    {
+      "id": "comm14",
+      "title": "Open Educational Resources Hub",
+      "description": "Community-curated repository of open educational resources across subjects",
+      "author": "Marcus Brown",
+      "tags": ["OER", "Open Education", "Teaching Resources"],
+      "createdAt": "2024-04-05",
+      "stars": 429,
+      "forks": 113
+    }
+  ]
+} 

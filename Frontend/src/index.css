@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 26, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, rgba(138, 43, 226, 0.5), rgba(0, 204, 255, 0.5));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, rgba(138, 43, 226, 0.8), rgba(0, 204, 255, 0.8));
+}

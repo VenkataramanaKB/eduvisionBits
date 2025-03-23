@@ -1,0 +1,24 @@
+{
+    "name": "Janeesh",
+    "bio": "Software Developer | AI & Blockchain Enthusiast",
+    "location": "New York, USA",
+    "website": "https://janeesh.dev",
+    "email": "janeesh@example.com",
+    "linkedin": "https://linkedin.com/in/janeesh",
+    "github": "https://github.com/janeesh",
+    "gfg": "https://www.geeksforgeeks.org/user/janeesh",
+    "codeforces": "https://codeforces.com/profile/janeesh",
+    "codechef": "https://www.codechef.com/users/janeesh",
+    "skills": ["React", "Node.js", "Blockchain", "AI", "Python"],
+    "projects": [
+      {
+        "name": "AI-Powered Checklist",
+        "link": "https://github.com/janeesh/ai-checklist"
+      },
+      {
+        "name": "E-Commerce Platform",
+        "link": "https://github.com/janeesh/e-commerce"
+      }
+    ]
+  }
+  
